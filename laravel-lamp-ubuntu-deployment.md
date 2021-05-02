@@ -110,14 +110,14 @@ PHP Version => 7.4.3
 	create a file named "config" in .ssh directory of your local computer,  
 	then in the config file insert the following, save and exit.  
 	  
-	`# POSX@DEV  
+	`# POSX@DEV`   
 	Host posx-dev  
 		HostName <server_ip or server_address>  
 		User <user_name>  
 		Port <port>  
 		PreferredAuthentications publickey  
 		IdentityFile <path/to/private/key>  
-	`  
+    
 	Now to login into our server,  
 	>$ ssh posx-dev  
   
@@ -486,4 +486,3 @@ References:
 	10.  https://stackoverflow.com/questions/23411520/how-to-fix-error-laravel-log-could-not-be-opened  
 	11.  https://stackoverflow.com/questions/1580596/how-do-i-make-git-ignore-file-mode-chmod-changes  
 	12.  https://askubuntu.com/questions/256013/apache-error-could-not-reliably-determine-the-servers-fully-qualified-domain-n  
-	
