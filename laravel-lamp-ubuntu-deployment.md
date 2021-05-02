@@ -109,16 +109,16 @@ PHP Version => 7.4.3
   
 	create a file named "config" in .ssh directory of your local computer,  
 	then in the config file insert the following, save and exit.  
-	  
-	`# POSX@DEV`   
-	Host posx-dev  
-		HostName <server_ip or server_address>  
-		User <user_name>  
-		Port <port>  
-		PreferredAuthentications publickey  
-		IdentityFile <path/to/private/key>  
-    
-	Now to login into our server,  
+	```  
+		# POSX@DEV   
+		Host posx-dev  
+			HostName <server_ip or server_address>  
+			User <user_name>  
+			Port <port>  
+			PreferredAuthentications publickey  
+			IdentityFile <path/to/private/key>  
+        ```
+	Now to login to our server,  
 	>$ ssh posx-dev  
   
 17. As we have other means to access the server as a non root user so, we should revoke remote login permission of root user.  
@@ -225,46 +225,46 @@ PHP Version => 7.4.3
 	>$ sudo nano laravelpos.conf  
 	  
 	edit the content and point DocumnetRoot, Directory to your project's public directory.  
-	`
-	<VirtualHost *:80>  
-		ServerAdmin webmaster@localhost  
-		DocumentRoot /var/www/laravel-pos/public  
-		  
-		<Directory /var/www/laravel-pos/public>  
-			Options Indexes FollowSymLinks  
-			AllowOverride All  
-			Require all granted  
-		</Directory>  
-		  
-		ErrorLog ${APACHE_LOG_DIR}/error.log  
-		CustomLog ${APACHE_LOG_DIR}/access.log combined  
-  
-		<IfModule mod_dir.c>  
-			DirectoryIndex index.php index.pl index.cgi index.html index.xhtml index.htm  
-		</IfModule>  
-	</VirtualHost>  
-    `  
+	```
+		<VirtualHost *:80>  
+			ServerAdmin webmaster@localhost  
+			DocumentRoot /var/www/laravel-pos/public  
+
+			<Directory /var/www/laravel-pos/public>  
+				Options Indexes FollowSymLinks  
+				AllowOverride All  
+				Require all granted  
+			</Directory>  
+
+			ErrorLog ${APACHE_LOG_DIR}/error.log  
+			CustomLog ${APACHE_LOG_DIR}/access.log combined  
+
+			<IfModule mod_dir.c>  
+				DirectoryIndex index.php index.pl index.cgi index.html index.xhtml index.htm  
+			</IfModule>  
+		</VirtualHost>  
+    	```
 	  
 	In case your are using a domain,  
 	>$ sudo nano /etc/apache2/sites-available/your_domain.conf  
 	Paste in the following configuration block, which is similar to the default, but updated for our new directory and domain name:  
       
-	`
+	```
 	<VirtualHost *:80>  
 		ServerAdmin webmaster@localhost  
 		ServerName your_domain  
 		ServerAlias www.your_domain  
 		DocumentRoot /var/www/project/public  
-		    
+
 		<Directory /var/www/project/public>  
 			AllowOverride All 
 			Require all granted  
 		</Directory>  
-  
+
 		ErrorLog ${APACHE_LOG_DIR}/error.log  
 		CustomLog ${APACHE_LOG_DIR}/access.log combined  
 	</VirtualHost>  
-	`  
+	```
 30. Enable configuration file and disable deafault config file,  
 	>$ sudo a2ensite laravelpos.conf  
 	>$ sudo a2dissite 000-default.conf  
@@ -323,13 +323,13 @@ PHP Version => 7.4.3
 		AllowOverride All  
 	directive within the <Directory /usr/share/phpmyadmin> section of the configuration file, like this:  
   
-	`
-	<Directory /usr/share/phpmyadmin>  
-    	Options SymLinksIfOwnerMatch
-    	DirectoryIndex index.php
-    	AllowOverride All
-    	. . .
-	`  
+	```
+		<Directory /usr/share/phpmyadmin>  
+		Options SymLinksIfOwnerMatch
+		DirectoryIndex index.php
+		AllowOverride All
+		. . .
+	```  
   
 	press ctrl + o and enter to save and ctrl + x to exit  
   
@@ -339,12 +339,12 @@ PHP Version => 7.4.3
 	>$ sudo nano /usr/share/phpmyadmin/.htaccess  
 		paste in the following,  
 	  
-	`
+	```
 		AuthType Basic  
 		AuthName "Restricted Files"  
 		AuthUserFile /etc/phpmyadmin/.htpasswd  
 		Require valid-user  
-	`  
+	```  
 	>$ sudo htpasswd -c /etc/phpmyadmin/.htpasswd user_name  
 	enter pasword and confirm password,  
 	>$ sudo systemctl restart apache2  
@@ -366,14 +366,14 @@ PHP Version => 7.4.3
   
 	append the following at the start,  
   
-	`
-	<VirtualHost *:80>  
-		ServerName dbrowser.mapsit.link  
-		DocumentRoot /usr/share/phpmyadmin  
-  
-		ErrorLog ${APACHE_LOG_DIR}/dbrowser.error.log  
-		CustomLog ${APACHE_LOG_DIR}/dbrowser.access.log combined  
-    `  
+	```
+		<VirtualHost *:80>  
+			ServerName dbrowser.mapsit.link  
+			DocumentRoot /usr/share/phpmyadmin  
+
+			ErrorLog ${APACHE_LOG_DIR}/dbrowser.error.log  
+			CustomLog ${APACHE_LOG_DIR}/dbrowser.access.log combined  
+    	```  
 	and add  
 		</VirtualHost>  
 	at the very last of the file,  
@@ -382,7 +382,7 @@ PHP Version => 7.4.3
 	name your phpmyadmin configuration file according to your records e.g., "subdomain.example.com.conf"  
   
 	and comment out this line,  
-		Alias /phpmyadmin /usr/share/phpmyadmin  
+		`Alias /phpmyadmin /usr/share/phpmyadmin`  
 	to,  
 		`#Alias /phpmyadmin /usr/share/phpmyadmin`  
   
