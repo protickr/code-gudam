@@ -118,6 +118,7 @@ PHP Version => 7.4.3
 			PreferredAuthentications publickey  
 			IdentityFile <path/to/private/key>  
         ```
+	
 	Now to login to our server,  
 	>$ ssh posx-dev  
   
