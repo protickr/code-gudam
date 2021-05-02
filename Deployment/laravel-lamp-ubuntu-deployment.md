@@ -274,6 +274,7 @@ PHP Version => 7.4.3
 	>$ sudo a2dissite 000-default.conf  
 	>$ sudo systemctl restart apache2  
 	>$ sudo apache2ctl configtest  
+	>$ sudo a2enmod rewrite  
   
 #### Now lets add domain to our server.  
   
