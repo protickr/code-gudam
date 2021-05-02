@@ -380,7 +380,7 @@ PHP Version => 7.4.3
 	```  
 
 	and add  
-		</VirtualHost>  
+		`</VirtualHost>`  
 	at the very last of the file,  
   
 	also please note that you need to replace "dbrowser" with your chosen subdomain name and  
