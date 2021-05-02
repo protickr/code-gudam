@@ -432,10 +432,10 @@ PHP Version => 7.4.3
 	    or 1 if you want to keep both HTTP and HTTPS as separate methods of accessing your website.  
   
 	f. To check the status of this service and make sure it’s active and running, you can use:  
-	    >$ sudo systemctl status certbot.timer  
+		`$ sudo systemctl status certbot.timer`  
   
 	g. To test the renewal process, you can do a dry run with certbot:  
-		sudo certbot renew --dry-run  
+		`$ sudo certbot renew --dry-run`  
   
 	The certbot package we installed takes care of renewals by including a renew script to /etc/cron.d,  
 	which is managed by a systemctl service called certbot.timer.  
@@ -455,12 +455,14 @@ Additional troubleshooting tips, on error,
 	Creating the data directory manually at (storage/framework/cache) should fix this issue.  
   
 "laravel.log could not be opened"  
-	sudo chown -R $USER:www-data storage  
-	sudo chown -R $USER:www-data bootstrap/cache  
+	
+	>$ sudo chown -R $USER:www-data storage  
+	>$ sudo chown -R $USER:www-data bootstrap/cache  
+	
 	then to set directory permission try this:  
   
-	chmod -R 775 storage  
-	chmod -R 775 bootstrap/cache  
+	>$ chmod -R 775 storage  
+	>$ chmod -R 775 bootstrap/cache  
   
 “Could not reliably determine the server's fully qualified domain name”  
 	This is just a friendly warning and not really a problem (as in that something does not work).  
@@ -471,10 +473,11 @@ Additional troubleshooting tips, on error,
 	ServerName 127.0.0.1  
 	and then restart apache by typing into the terminal:  
   
-	sudo systemctl reload apache2  
+	`$ sudo systemctl reload apache2`  
+	
 	the notice will disappear.  
 
-">$ php artisan optimize:clear"
+> $ php artisan optimize:clear
   
 -------------------------------------------------------------------------------------------------------------------------
 Tutorials that we followed,  
