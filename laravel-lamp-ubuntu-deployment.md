@@ -109,7 +109,7 @@ PHP Version => 7.4.3
   
 	create a file named "config" in .ssh directory of your local computer,  
 	then in the config file insert the following, save and exit.  
-	```  
+	``` apacheconf  
 		# POSX@DEV   
 		Host posx-dev  
 			HostName <server_ip or server_address>  
