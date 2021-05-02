@@ -1,5 +1,5 @@
 # How to deploy a laravel application on digitalocean droplet 
-##(Ubuntu LAMP stack)
+## (Ubuntu LAMP stack)
   
 ### Including  
 	* SSH   
