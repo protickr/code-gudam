@@ -244,8 +244,8 @@ PHP Version => 7.4.3
 			<IfModule mod_dir.c>  
 				DirectoryIndex index.php index.pl index.cgi index.html index.xhtml index.htm  
 			</IfModule>  
-		</VirtualHost>  
-    	```
+		</VirtualHost>
+	```
 
 	In case your are using a domain,  
 	>$ sudo nano /etc/apache2/sites-available/your_domain.conf  
@@ -265,7 +265,7 @@ PHP Version => 7.4.3
 
 			ErrorLog ${APACHE_LOG_DIR}/error.log  
 			CustomLog ${APACHE_LOG_DIR}/access.log combined  
-		</VirtualHost>  
+		</VirtualHost>
 	```
 
 30. Enable configuration file and disable deafault config file,  
@@ -376,8 +376,8 @@ PHP Version => 7.4.3
 			DocumentRoot /usr/share/phpmyadmin  
 
 			ErrorLog ${APACHE_LOG_DIR}/dbrowser.error.log  
-			CustomLog ${APACHE_LOG_DIR}/dbrowser.access.log combined  
-    	```  
+			CustomLog ${APACHE_LOG_DIR}/dbrowser.access.log combined
+	```  
 
 	and add  
 		</VirtualHost>  
