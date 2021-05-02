@@ -1,4 +1,4 @@
-# How to deploy a laravel application on digitalocean droplet (Ubuntu LAMP stack).  
+# How to deploy a laravel application on digitalocean droplet (Ubuntu LAMP stack)
   
 ### Including  
 	* SSH   
@@ -109,7 +109,7 @@ PHP Version => 7.4.3
   
 	create a file named "config" in .ssh directory of your local computer,  
 	then in the config file insert the following, save and exit.  
-	``` apacheconf  
+	```apacheconf  
 		# POSX@DEV   
 		Host posx-dev  
 			HostName <server_ip or server_address>  
@@ -117,7 +117,8 @@ PHP Version => 7.4.3
 			Port <port>  
 			PreferredAuthentications publickey  
 			IdentityFile <path/to/private/key>  
-	
+	```
+  
 	Now to login to our server,  
 	>$ ssh posx-dev  
   
@@ -125,6 +126,7 @@ PHP Version => 7.4.3
 	
 	Login to server as non-root user. e.g., dev  
 	>$ sudo nano /etc/ssh/sshd_config  
+  
 	change  
 	"PermitRootLogin yes" to "PermitRootLogin no" and  
 	"PasswordAuthentication yes" to "PasswordAuthentication no"  
@@ -225,7 +227,7 @@ PHP Version => 7.4.3
 	>$ sudo nano laravelpos.conf  
 	  
 	edit the content and point DocumnetRoot, Directory to your project's public directory.  
-	```
+	```apacheconf
 		<VirtualHost *:80>  
 			ServerAdmin webmaster@localhost  
 			DocumentRoot /var/www/laravel-pos/public  
@@ -244,27 +246,28 @@ PHP Version => 7.4.3
 			</IfModule>  
 		</VirtualHost>  
     	```
-	  
+
 	In case your are using a domain,  
 	>$ sudo nano /etc/apache2/sites-available/your_domain.conf  
 	Paste in the following configuration block, which is similar to the default, but updated for our new directory and domain name:  
       
-	```
-	<VirtualHost *:80>  
-		ServerAdmin webmaster@localhost  
-		ServerName your_domain  
-		ServerAlias www.your_domain  
-		DocumentRoot /var/www/project/public  
+	```apacheconf
+		<VirtualHost *:80>  
+			ServerAdmin webmaster@localhost  
+			ServerName your_domain  
+			ServerAlias www.your_domain  
+			DocumentRoot /var/www/project/public  
 
-		<Directory /var/www/project/public>  
-			AllowOverride All 
-			Require all granted  
-		</Directory>  
+			<Directory /var/www/project/public>  
+				AllowOverride All 
+				Require all granted  
+			</Directory>  
 
-		ErrorLog ${APACHE_LOG_DIR}/error.log  
-		CustomLog ${APACHE_LOG_DIR}/access.log combined  
-	</VirtualHost>  
+			ErrorLog ${APACHE_LOG_DIR}/error.log  
+			CustomLog ${APACHE_LOG_DIR}/access.log combined  
+		</VirtualHost>  
 	```
+
 30. Enable configuration file and disable deafault config file,  
 	>$ sudo a2ensite laravelpos.conf  
 	>$ sudo a2dissite 000-default.conf  
@@ -323,14 +326,14 @@ PHP Version => 7.4.3
 		AllowOverride All  
 	directive within the <Directory /usr/share/phpmyadmin> section of the configuration file, like this:  
   
-	```
+	```apacheconf
 		<Directory /usr/share/phpmyadmin>  
 		Options SymLinksIfOwnerMatch
 		DirectoryIndex index.php
 		AllowOverride All
 		. . .
 	```  
-  
+
 	press ctrl + o and enter to save and ctrl + x to exit  
   
 	>$ sudo systemctl restart apache2  
@@ -339,12 +342,13 @@ PHP Version => 7.4.3
 	>$ sudo nano /usr/share/phpmyadmin/.htaccess  
 		paste in the following,  
 	  
-	```
+	```apacheconf
 		AuthType Basic  
 		AuthName "Restricted Files"  
 		AuthUserFile /etc/phpmyadmin/.htpasswd  
 		Require valid-user  
 	```  
+  
 	>$ sudo htpasswd -c /etc/phpmyadmin/.htpasswd user_name  
 	enter pasword and confirm password,  
 	>$ sudo systemctl restart apache2  
@@ -366,7 +370,7 @@ PHP Version => 7.4.3
   
 	append the following at the start,  
   
-	```
+	```apacheconf
 		<VirtualHost *:80>  
 			ServerName dbrowser.mapsit.link  
 			DocumentRoot /usr/share/phpmyadmin  
@@ -374,6 +378,7 @@ PHP Version => 7.4.3
 			ErrorLog ${APACHE_LOG_DIR}/dbrowser.error.log  
 			CustomLog ${APACHE_LOG_DIR}/dbrowser.access.log combined  
     	```  
+
 	and add  
 		</VirtualHost>  
 	at the very last of the file,  
