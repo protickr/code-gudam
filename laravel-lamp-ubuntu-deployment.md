@@ -54,9 +54,9 @@ PHP Version => 7.4.3
   
 8.	Now lets add our newly generated ssh key-pair's public key to our droplet's ssh server,  
   
-	UNIX: >$ cat ~/.ssh/output_file_name.pub | ssh root@<server_ip> 'cat - >> ~/.ssh/authorized_keys'  
+	UNIX: `>$ cat ~/.ssh/output_file_name.pub | ssh root@<server_ip> 'cat - >> ~/.ssh/authorized_keys'`  
 	\
-	Windows: >$ get-content ~/.ssh/posx.pub | ssh root@<server_ip> $ 'cat - >> ~/.ssh/authorized_keys'  
+	Windows: `>$ get-content ~/.ssh/posx.pub | ssh root@<server_ip> $ 'cat - >> ~/.ssh/authorized_keys'`  
   
 9. 	Now lets login to our server vm using ssh and public key  
 	>$ ssh -i <path/to/your/private/key> root@server_ip  
@@ -117,7 +117,6 @@ PHP Version => 7.4.3
 			Port <port>  
 			PreferredAuthentications publickey  
 			IdentityFile <path/to/private/key>  
-        ```
 	
 	Now to login to our server,  
 	>$ ssh posx-dev  
