@@ -48,7 +48,7 @@ PHP Version => 7.4.3
   
 7.	using openssh,  
 	>$ ssh-keygen -t rsa -b 4096 -C "your comment / name signature" -f "output_file_name"  
-	>$ ssh-keygen -t rsa -b 4096 -C "protickrr@gmail.com" -f "posx"  
+	>$ ssh-keygen -t rsa -b 4096 -C "protick@gmail.com" -f "posx"  
   
 	you will be prompted to enter a passphrase, you can enter and then confirm it or ignore it by pressing enter twice.  
 	if you enter a passphrase while generating the key-pair then you will be asked for the passphrase in the time of logging in while using that key  
@@ -57,7 +57,7 @@ PHP Version => 7.4.3
   
 	UNIX: `>$ cat ~/.ssh/output_file_name.pub | ssh root@<server_ip> 'cat - >> ~/.ssh/authorized_keys'`  
 	\
-	Windows: `>$ get-content ~/.ssh/posx.pub | ssh root@<server_ip> $ 'cat - >> ~/.ssh/authorized_keys'`  
+	Windows: `>$ get-content ~/.ssh/posx.pub | ssh root@<server_ip> 'cat - >> ~/.ssh/authorized_keys'`  
   
 9. 	Now lets login to our server vm using ssh and public key  
 	>$ ssh -i <path/to/your/private/key> root@server_ip  
