@@ -482,7 +482,6 @@ Additional troubleshooting tips, on error,
 > $ php artisan optimize:clear
   
 -------------------------------------------------------------------------------------------------------------------------
-Tutorials that we followed,  
 References:  
 	1.   https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-2  
 	2.   https://kaloraat.com/articles/how-to-deploy-laravel-to-digital-ocean  
