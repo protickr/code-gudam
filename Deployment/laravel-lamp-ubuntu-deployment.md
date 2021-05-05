@@ -487,12 +487,10 @@ References:
 	1.   https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-2  
 	2.   https://kaloraat.com/articles/how-to-deploy-laravel-to-digital-ocean  
 	3.   https://devdojo.com/bobbyiliev/laravel-app-on-digital-ocean-ubuntu-1904-droplet-step-by-step-guide#create-a-droplet  
-	4.   https://devdojo.com/bobbyiliev/laravel-app-on-digital-ocean-ubuntu-1904-droplet-step-by-step-guide#create-a-droplet  
-	5.   https://gist.github.com/harryfinn/829bba2a9ad8c8a471b07016165ef82d  
-	6.   https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04  
-	7.   https://www.linuxbabe.com/ubuntu/install-phpmyadmin-apache-lamp-ubuntu-18-04  
-	8.   https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-20-04  
-	9.   https://stackoverflow.com/questions/52231248/laravel-showing-failed-to-clear-cache-make-sure-you-have-the-appropriate-permi  
-	10.  https://stackoverflow.com/questions/23411520/how-to-fix-error-laravel-log-could-not-be-opened  
-	11.  https://stackoverflow.com/questions/1580596/how-do-i-make-git-ignore-file-mode-chmod-changes  
-	12.  https://askubuntu.com/questions/256013/apache-error-could-not-reliably-determine-the-servers-fully-qualified-domain-n  
+	4.   https://gist.github.com/harryfinn/829bba2a9ad8c8a471b07016165ef82d  
+	5.   https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04  
+	6.   https://www.linuxbabe.com/ubuntu/install-phpmyadmin-apache-lamp-ubuntu-18-04  
+	7.   https://stackoverflow.com/questions/52231248/laravel-showing-failed-to-clear-cache-make-sure-you-have-the-appropriate-permi  
+	8.  https://stackoverflow.com/questions/23411520/how-to-fix-error-laravel-log-could-not-be-opened  
+	9.  https://stackoverflow.com/questions/1580596/how-do-i-make-git-ignore-file-mode-chmod-changes  
+	10.  https://askubuntu.com/questions/256013/apache-error-could-not-reliably-determine-the-servers-fully-qualified-domain-n  
