@@ -32,3 +32,6 @@ in newer version of xdebug , it will not work unless you add the following line,
 1. Add a run configuration  
     ![PHPStorm Run Config](./images/debug-config-1.JPG)   
 
+2. Add a Debug configuration  
+    ![PHPStorm Run Config](./images/debug-config-2.JPG)   
+
