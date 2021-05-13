@@ -48,7 +48,7 @@ PHP Version => 7.4.3
   
 7.	using openssh,  
 	>$ ssh-keygen -t rsa -b 4096 -C "your comment / name signature" -f "output_file_name"  
-	>$ ssh-keygen -t rsa -b 4096 -C "protickrr@gmail.com" -f "posx"  
+	>$ ssh-keygen -t rsa -b 4096 -C "protick@gmail.com" -f "posx"  
   
 	you will be prompted to enter a passphrase, you can enter and then confirm it or ignore it by pressing enter twice.  
 	if you enter a passphrase while generating the key-pair then you will be asked for the passphrase in the time of logging in while using that key  
@@ -57,7 +57,7 @@ PHP Version => 7.4.3
   
 	UNIX: `>$ cat ~/.ssh/output_file_name.pub | ssh root@<server_ip> 'cat - >> ~/.ssh/authorized_keys'`  
 	\
-	Windows: `>$ get-content ~/.ssh/posx.pub | ssh root@<server_ip> $ 'cat - >> ~/.ssh/authorized_keys'`  
+	Windows: `>$ get-content ~/.ssh/posx.pub | ssh root@<server_ip> 'cat - >> ~/.ssh/authorized_keys'`  
   
 9. 	Now lets login to our server vm using ssh and public key  
 	>$ ssh -i <path/to/your/private/key> root@server_ip  
@@ -274,6 +274,7 @@ PHP Version => 7.4.3
 	>$ sudo a2dissite 000-default.conf  
 	>$ sudo systemctl restart apache2  
 	>$ sudo apache2ctl configtest  
+	>$ sudo a2enmod rewrite  
   
 #### Now lets add domain to our server.  
   
@@ -449,7 +450,7 @@ PHP Version => 7.4.3
   
 	all should be available online.  
   
-Additional troubleshooting tips, on error,  
+### Additional troubleshooting tips, on error,  
 "Failed to clear cache. Make sure you have the appropriate permissions"  
 	If the data directory doesn't exist under (storage/framework/cache/data), then you will have this error.  
 	This data directory doesn't exist by default on a fresh/new installation.  
@@ -481,17 +482,14 @@ Additional troubleshooting tips, on error,
 > $ php artisan optimize:clear
   
 -------------------------------------------------------------------------------------------------------------------------
-Tutorials that we followed,  
 References:  
 	1.   https://www.digitalocean.com/community/tutorials/how-to-set-up-ssh-keys-2  
 	2.   https://kaloraat.com/articles/how-to-deploy-laravel-to-digital-ocean  
 	3.   https://devdojo.com/bobbyiliev/laravel-app-on-digital-ocean-ubuntu-1904-droplet-step-by-step-guide#create-a-droplet  
-	4.   https://devdojo.com/bobbyiliev/laravel-app-on-digital-ocean-ubuntu-1904-droplet-step-by-step-guide#create-a-droplet  
-	5.   https://gist.github.com/harryfinn/829bba2a9ad8c8a471b07016165ef82d  
-	6.   https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04  
-	7.   https://www.linuxbabe.com/ubuntu/install-phpmyadmin-apache-lamp-ubuntu-18-04  
-	8.   https://www.digitalocean.com/community/tutorials/how-to-secure-apache-with-let-s-encrypt-on-ubuntu-20-04  
-	9.   https://stackoverflow.com/questions/52231248/laravel-showing-failed-to-clear-cache-make-sure-you-have-the-appropriate-permi  
-	10.  https://stackoverflow.com/questions/23411520/how-to-fix-error-laravel-log-could-not-be-opened  
-	11.  https://stackoverflow.com/questions/1580596/how-do-i-make-git-ignore-file-mode-chmod-changes  
-	12.  https://askubuntu.com/questions/256013/apache-error-could-not-reliably-determine-the-servers-fully-qualified-domain-n  
+	4.   https://gist.github.com/harryfinn/829bba2a9ad8c8a471b07016165ef82d  
+	5.   https://www.digitalocean.com/community/tutorials/how-to-install-and-secure-phpmyadmin-on-ubuntu-20-04  
+	6.   https://www.linuxbabe.com/ubuntu/install-phpmyadmin-apache-lamp-ubuntu-18-04  
+	7.   https://stackoverflow.com/questions/52231248/laravel-showing-failed-to-clear-cache-make-sure-you-have-the-appropriate-permi  
+	8.  https://stackoverflow.com/questions/23411520/how-to-fix-error-laravel-log-could-not-be-opened  
+	9.  https://stackoverflow.com/questions/1580596/how-do-i-make-git-ignore-file-mode-chmod-changes  
+	10.  https://askubuntu.com/questions/256013/apache-error-could-not-reliably-determine-the-servers-fully-qualified-domain-n  
