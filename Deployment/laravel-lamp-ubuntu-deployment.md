@@ -450,7 +450,7 @@ PHP Version => 7.4.3
   
 	all should be available online.  
   
-Additional troubleshooting tips, on error,  
+### Additional troubleshooting tips, on error,  
 "Failed to clear cache. Make sure you have the appropriate permissions"  
 	If the data directory doesn't exist under (storage/framework/cache/data), then you will have this error.  
 	This data directory doesn't exist by default on a fresh/new installation.  
