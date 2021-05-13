@@ -30,5 +30,5 @@ in newer version of xdebug , it will not work unless you add the following line,
 
 ### Configuring PHPStorm and Extensions
 1. Add a run configuration  
-    ![PHPStorm Run Config](./images/debug-config-1.jpg)   
+    ![PHPStorm Run Config](./images/debug-config-1.JPG)   
 
