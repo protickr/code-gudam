@@ -479,7 +479,7 @@ PHP Version => 7.4.3
 	
 	the notice will disappear.  
 
-> $ php artisan optimize:clear
+#### $ php artisan optimize:clear
   
 -------------------------------------------------------------------------------------------------------------------------
 References:  
