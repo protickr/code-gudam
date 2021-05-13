@@ -451,12 +451,12 @@ PHP Version => 7.4.3
 	all should be available online.  
   
 ### Additional troubleshooting tips, on error,  
-"Failed to clear cache. Make sure you have the appropriate permissions"  
+**"Failed to clear cache. Make sure you have the appropriate permissions"**  
 	If the data directory doesn't exist under (storage/framework/cache/data), then you will have this error.  
 	This data directory doesn't exist by default on a fresh/new installation.  
 	Creating the data directory manually at (storage/framework/cache) should fix this issue.  
   
-"laravel.log could not be opened"  
+**"laravel.log could not be opened"**  
 	
 	>$ sudo chown -R $USER:www-data storage  
 	>$ sudo chown -R $USER:www-data bootstrap/cache  
@@ -466,7 +466,7 @@ PHP Version => 7.4.3
 	>$ chmod -R 775 storage  
 	>$ chmod -R 775 bootstrap/cache  
   
-“Could not reliably determine the server's fully qualified domain name”  
+**“Could not reliably determine the server's fully qualified domain name”**  
 	This is just a friendly warning and not really a problem (as in that something does not work).  
 	If you go to:  
 	/etc/apache2/apache2.conf  
