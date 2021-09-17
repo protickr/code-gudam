@@ -150,8 +150,11 @@ PHP Version => 7.4.3
   
 20.	on your server terminal,  
 	>$ cd /var/www/  
-	>$ sudo rm -rf html/  
-	>$ sudo git clone <your_repo_url>  
+	>$ sudo rm -rf html/
+	>$ cd ~  
+	>$ git clone <your_repo_url>  
+	>$ sudo mv ~/your_project /var/www
+	>$ git pull
   
 21.	Install composer  
 	>$ sudo apt-get install composer  
