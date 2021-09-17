@@ -158,6 +158,7 @@ PHP Version => 7.4.3
   
 21.	Install composer  
 	>$ sudo apt-get install composer  
+	>$ sudo apt-get install php7.4-curl
   
 22. Install composer packages,  
 	>$ cd /var/www/laravel-pos  
