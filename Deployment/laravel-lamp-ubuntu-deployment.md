@@ -172,7 +172,8 @@ PHP Version => 7.4.3
 	>$ sudo find /var/www/laravel-pos -type d -exec chmod 775 {} \\;  
 	  
 	before running the following commands run,  
-	> git config --global core.filemode false  
+	> git config core.filemode false  
+	> cd to your project directory first
   
 	>$ sudo chgrp -R www-data storage bootstrap/cache  
 	>$ sudo chmod -R ug+rwx storage bootstrap/cache  
