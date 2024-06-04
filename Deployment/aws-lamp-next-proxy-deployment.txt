@@ -1,0 +1,505 @@
+* AWS Dashboard:
+--------------
+> region selected: aws-southeast-1 (singapore)
+> EC2 
+> launch instance 
+> OS image: ubuntu server 24.04 LTS HVM, SSD volume type / Canonical, Ubuntu, 24.04 LTS, 
+    amd64 noble image build on 2024-04-23
+> architecture: 64bit x86
+> hardware resources: t2.small => 1vCPU 2GiB RAM
+> Root volume EBS SSD: 30GB
+> create a key pair from aws ec2 instance window > connect (for instructions)
+
+
+* Ubuntu Server VM Setup: 
+-----------------------
+> ssh into VM 
+    ssh -i my-project.pem ubuntu@vm-address.ap-southeast-1.compute.amazonaws.com
+
+> sudo apt-get update
+> sudo apt-get upgrade
+> sudo apt-get dist-upgrade
+
+
+* SSH setup in VM, Local Machine and Repository: 
+-------------------------------
+> in VM's .ssh directory 
+    ssh-keygen -t rsa -b 4096
+        generates id_rsa and id_rsa.pub 
+
+    *** copy the content of the id_rsa.pub into github/repository/setting/deploy keys > add key 
+
+> In local machine generate new ssh key
+    ssh-keygen -t rsa -b 4096 -C 'protickrr@gmail.com' -f 'my-project'
+
+> paste generated-key.pub's content to server's .ssh/authorized_keys file by, 
+    cat ~/.ssh/my-project.pub | ssh ubuntu@vm-address.ap-southeast-1.compute.amazonaws.com -i ~/Desktop/my-project-deployment/my-project.pem 'cat - >> ~/.ssh/authorized_keys'
+
+> now in local UNIX machine's 
+    ~/.ssh > config > 
+    add the following, 
+
+    # ubuntu@my-project   
+    Host my-project
+        HostName vm-address.ap-southeast-1.compute.amazonaws.com
+        User ubuntu
+        Port 22
+        PreferredAuthentications publickey  
+        IdentityFile ~/.ssh/my-project
+
+> now login to server 
+    ssh my-project
+
+
+* Setup PHP: 
+----------
+> add ondrej repository to package manager 
+    sudo add-apt-repository ppa:ondrej/php
+
+> sudo apt-get install software-properties-common -y
+
+> install php8.3
+    sudo apt-get install php
+
+* Setup PHP extensions and Composer 
+---------------------------------
+> in vm install php extensions, mysql, apache2, 
+    sudo apt-get install apache2 apache2-utils curl mysql-server mysql-client php libapache2-mod-php php-mysql 
+    php-common php-mbstring php-xmlrpc php-soap php-gd php-xml php-mysql php-cli php-zip
+
+> install composer 
+    curl -sS https://getcomposer.org/installer -o composer-setup.php
+    sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+    sudo composer self-update
+
+
+* Setup NVM for NodeJS 
+--------------------
+> install nvm
+    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+
+> install node 
+    nvm install 20.14.0
+
+
+* MySQL, Database configuration
+-------------------------------
+
+> configure mysql 
+    sudo mysql_secure_installation
+    > enter y 
+
+> login to mysql in our VM by, 
+    sudo mysql -u root -p
+    when prompts for password just press enter, no password required 
+
+> create database 
+    create database `my-project`;
+
+> create non-root mysql user, 
+    CREATE USER 'user_name'@'%' IDENTIFIED BY 'password';
+    GRANT ALL PRIVILEGES ON `my-project`.* TO 'user_name'@'%' WITH GRANT OPTION;
+    FLUSH PRIVILEGES;
+
+
+* Config summary
+----------------
+> php version: PHP 8.3.7
+> composer version: Composer version 2.7.6
+> mysql version: mysql  Ver 8.0.36-2ubuntu3 for Linux on x86_64 ((Ubuntu))
+> nodejs version: v20.14.0
+> npm version: 10.7.0
+
+
+* Project Setup
+---------------
+Laravel/API application
+-----------------------
+> Get the project in VM, 
+    clone the repository like this, (do not use https:// protocol)
+    git clone git@github.com:protickr/my-project.git
+
+> move the project to /var/www/ 
+    sudo mv my-project/ /var/www
+
+> change file permission or my-project so apache2 user (www-data) can read,write and execute it, 
+    sudo chown -R ubuntu:www-data /var/www/my-project
+    sudo find /var/www/my-project -type f -exec chmod 664 {} \;
+    sudo find /var/www/my-project -type d -exec chmod 775 {} \;
+
+> cd into project directory and run the following 
+    git config core.filemode false ( so file permission changes do not get marked as "modifications" to files)
+
+> cd into projects/laravel part then, 
+    sudo chgrp -R www-data storage bootstrap/cache
+
+
+> install composer dependencies 
+    > composer install 
+        => message: run composer update 
+
+    > composer update 
+        => message: enable curl extension 
+
+    > sudo apt-get install php-curl 
+
+    > composer install 
+        => installing + 
+        => As there is no 'unzip' nor '7z' command installed zip files are being unpacked using the PHP zip extension.
+            This may cause invalid reports of corrupted archives. Besides, any UNIX permissions (e.g. executable) defined 
+            in the archives will be lost. Installing 'unzip' or '7z' (21.01+) may remediate them
+
+    > sudo apt-get install php-zip
+    > composer update 
+    > composer install 
+
+> generate laravel application key 
+    php artisan key:generate
+
+> migrate databases 
+    php artisan migrate:fresh
+
+> link storage 
+    php artisan storage:link
+
+> generate JWT secret 
+    php artisan jwt:secret
+
+
+
+* Configure apache2
+-------------------
+
+> add this to, /etc/apache2/sites-available/api.my-project.com.conf 
+    <VirtualHost *:80>  
+        ServerAdmin webmaster@localhost  
+        DocumentRoot /var/www/my-project/api/public  
+
+        <Directory /var/www/my-project/api/public >  
+            Options Indexes FollowSymLinks  
+            AllowOverride All  
+            Require all granted  
+        </Directory>  
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log  
+        CustomLog ${APACHE_LOG_DIR}/access.log combined  
+
+        <IfModule mod_dir.c>  
+            DirectoryIndex index.php index.pl index.cgi index.html index.xhtml index.htm  
+        </IfModule>  
+    </VirtualHost>
+
+
+> run these commands, 
+    > sudo a2ensite api.my-project.com.conf
+    > sudo a2dissite 000-default.conf
+    > sudo systemctl restart apache2
+    > sudo apache2ctl configtest
+    > sudo a2enmod rewrite
+
+> working my-project/api - laravel application 
+    http://server-live-ip/routes
+
+* Domain and DNS Configuration (Namecheap, EC2)
+    > AWS: Goto dashboard > select your ec2 instance > select elastic ip 
+    > Allocate Elastic IP address > create > Associate Elastic IP addressInfo
+    > to our ec2 instance 
+    > http://server-elastic-live-ip/routes (works)
+
+    * Route53
+        > AWS dashboard > route53 > create hosted zone
+        > in the Domain name section use your domain name 
+        > select your newly created hosted zone 
+        > click on create record > simple routing > define simple routing 
+        1. chose "A" record for main and choose endpoint to your associated elastic IP 
+        2. and for subdomains choose "A" record and choose endpoint to "alias to another record"
+        3. select your hosted zone and click details you will get your 4 aws name servers 
+
+    * configure name cheap
+        > go to namecheap > dashboard > domains > manage > select custom DNS
+        > add 4 name servers 
+
+
+* Configure apache virtual hosts and add domains 
+    <VirtualHost *:80>  
+        ServerAdmin webmaster@localhost
+
+        ServerName api.my-project.com
+        ServerAlias www.api.my-project.com
+
+        DocumentRoot /var/www/my-project/api/public  
+
+        <Directory /var/www/my-project/api/public>  
+            Options Indexes FollowSymLinks  
+            AllowOverride All  
+            Require all granted  
+        </Directory>  
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log  
+        CustomLog ${APACHE_LOG_DIR}/access.log combined  
+
+        <IfModule mod_dir.c>  
+            DirectoryIndex index.php index.pl index.cgi index.html index.xhtml index.htm  
+        </IfModule>  
+    </VirtualHost>
+
+    > apachectl -S
+    > apachectl configtest
+
+* install phpmyadmin 
+    > ssh to vm 
+        > sudo mysql -u root -p
+        > UNINSTALL COMPONENT "file://component_validate_password";
+        > exit; 
+        > sudo apt install phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+
+        phpmyadmin / root login is disabled
+            db-username: user_name
+            db-password: password
+
+        > sudo phpenmod mbstring
+        > sudo systemctl restart apache2
+        > sudo mysql -u root -p
+        > INSTALL COMPONENT "file://component_validate_password";
+        > exit
+
+* secure phpMyAdmin 
+    > sudo nano /etc/apache2/conf-available/phpmyadmin.conf
+        Add an
+        AllowOverride All
+        directive within the <Directory /usr/share/phpmyadmin> section of the configuration file, like this:
+
+            <Directory /usr/share/phpmyadmin>  
+            Options SymLinksIfOwnerMatch
+            DirectoryIndex index.php
+            AllowOverride All
+
+    > .htaccess 
+        sudo nano /usr/share/phpmyadmin/.htaccess
+
+        paste in, 
+            AuthType Basic  
+            AuthName "Restricted Files"  
+            AuthUserFile /etc/phpmyadmin/.htpasswd  
+            Require valid-user  
+
+    > create basic htpasswd user in phpmyadmin directory,
+        sudo htpasswd -c /etc/phpmyadmin/.htpasswd user_name
+        sudo systemctl restart apache2
+
+        username: user_name 
+        password: password
+
+        restart apache2 
+            sudo systemctl restart apache2
+
+* configure a subdomain for phpmyadmin 
+    > sudo a2disconf phpmyadmin.conf
+    > sudo systemctl reload apache2.service 
+    > sudo cp /etc/apache2/conf-available/phpmyadmin.conf /etc/apache2/sites-available/pma.my-project.com.conf
+    > sudo nano pma.my-project.com.conf
+
+    add this to the top of the file, 
+        <VirtualHost *:80>  
+            ServerName pma.my-project.com
+            ServerAlias www.pma.my-project.com  
+            DocumentRoot /usr/share/phpmyadmin  
+
+            ErrorLog ${APACHE_LOG_DIR}/dbrowser.error.log  
+            CustomLog ${APACHE_LOG_DIR}/dbrowser.access.log combined
+
+    and add the following at the very end of the file, 
+        </VirtualHost>
+
+    enable phpmyadmmin conf 
+        > sudo a2ensite pma.my-project.com.conf
+        > sudo systemctl reload apache2
+
+* enable SSL by certbot 
+    > sudo apt install certbot python3-certbot-apache
+    > sudo certbot --apache
+    > sudo systemctl status certbot.timer (check certbot status)
+    > sudo certbot renew --dry-run
+
+
+* enable firewall 
+    > sudo ufw enable 
+    > sudo ufw allow 22/tcp
+    > sudo ufw allow 'Apache Full'
+    > sudo ufw delete allow 'Apache'
+
+
+
+* NextJS application
+-----------------------
+NextJS SSR, Middleware will not work if we serve the static files of the app by 
+> next build 
+    next.config.js 
+    > output: "output-directory"
+
+* so we will be installing PM2 so that our next app starts up automatically and 
+    run on port 3000 on its own, 
+    > npm install -g pm2
+
+    configure pm2 
+        1. create project start command 
+            > pm2 start "cd /var/www/my-project/web && pnpm install && pnpm build && pnpm start" --name 'my-project-frontend' --wait-ready
+        
+        2. run pm2 at startup 
+            > pm2 startup systemd 
+                (follow outputted information)
+
+            > pm2 save 
+
+            > pm2 unstartup systemd
+                ( to remove pm2 from startup )
+
+        3. show status of pm2 
+            > systemctl status pm2-dev
+            > pm2 monit
+
+        4. show opened ports 
+            > sudo ss -lnt
+
+
+* configure apache2 VirtualHost proxy, 
+    > sudo a2enmod proxy
+    > sudo a2enmod proxy_http
+    > add the following to, my-project.com.conf, my-project.com-le-ssl.conf 
+    
+    <VirtualHost *:80>  
+        ServerAdmin webmaster@localhost
+
+        ServerName my-project.com
+        ServerAlias www.my-project.com
+
+        ProxyPreserveHost On        
+        ProxyPass / http://localhost:3000/
+        ProxyPassReverse / http://localhost:3000/
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log  
+        CustomLog ${APACHE_LOG_DIR}/access.log combined  
+
+        <IfModule mod_dir.c>  
+            DirectoryIndex index.php index.pl index.cgi index.html index.xhtml index.htm  
+        </IfModule>  
+    
+    </VirtualHost>
+
+
+* Errors and Fixes, 
+    next build                                                                                                  
+    my-project-frontend > sh: 1:
+        my-project-frontend > next: Permission denied
+        my-project-frontend >  ELIFECYCLE  Command failed.
+        my-project-frontend > > web@0.1.0 build
+        (issue created by node_modules/)
+    
+* Fix 
+    > sudo chmod -R 777 ~/.pm2
+    > change pm2 project start command and insert npm install like this,  
+        npm install > npm run build > npm run start 
+    > pm2 start all 
+    > pm2 monit
+
+
+* Laravel api server cors error FIX ( enable header without using a laravel package)
+> remove all ssl.conf files  
+> disbale all sites 
+
+> enable "headers" module by, 
+    sudo a2enmod headers
+
+> edit api.my-project.conf 
+    add the following, 
+        <VirtualHost *:80>  
+            <IfModule mod_headers.c> # requests handled by apache server first, its not a php server
+                Header always set Access-Control-Allow-Origin "https://my-project.com"
+                Header always set Access-Control-Allow-Methods "GET, POST, PUT, DELETE, OPTIONS"
+                Header always set Access-Control-Allow-Headers "Origin, X-Requested-With, Content-Type, Accept, Authorization"
+            </IfModule>
+        </VirtualHost>
+    or we can directly place Header set commands in the virtualhost except for placing them into the <IfModule mod_headers> tag 
+
+> apachectl configtest
+
+> sudo certbot --apache
+
+*** NOTE: In some cases a pre-flight OPTIONS request might result in a CORS error if the api endpoint is wrong ***
+    first check if your api url is set properly in the web/nextjs/react app 
+
+*** laravel fruitcake/cors works on apache aswell no need to add additional headers by a2enmod headers ***
+
+
+* Add swap space to VM 
+	https://www.digitalocean.com/community/tutorials/how-to-add-swap-space-on-ubuntu-20-04
+
+    > check swap information 
+        sudo swapon --show 
+            if there is no output then that means there is no swap memory 
+
+    > verify if there is any active swap memory 
+        free -h 
+
+    > check disk space 
+        df -h 
+            we can use this space, 
+            /dev/root        29G  5.4G   23G  20% /
+
+    > allocate disk space to a file, 
+        sudo fallocate -l 2G /swapfile
+    
+    > check how much space is allocated to "/swapfile"
+        ls -lh /swapfile
+
+    > make the "/swapfile" file only accessible to root by typing
+        sudo chmod 600 /swapfile
+    
+    > mark the "/swapfile" as swap space by 
+        sudo mkswap /swapfile
+
+        output:
+            Setting up swapspace version 1, size = 2 GiB (2147479552 bytes)
+            no label, UUID=805d8a9e-fd4b-4cbf-a874-8087163152d0 
+
+    > enable the swap space 
+        sudo swapon /swapfile
+
+    > check if swap space is active now, 
+        sudo swapon --show
+
+
+* make swap space as permanent 
+    the swap space we activated will only be enabled for the current session
+    to make it permanent do the following, 
+
+    > take a backup of /etc/fstab 
+        sudo cp /etc/fstab /etc/fstab.bak
+
+    > Add the swap file information to the end of your /etc/fstab file by typing
+        echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab
+
+* Tune the swap setting 
+    > check swappiness of the system 
+        cat /proc/sys/vm/swappiness
+
+    > for a server setting the swappiness closer to 0 will be better 
+        sudo sysctl vm.swappiness=10
+    
+    > set swappiness value on next restart 
+        sudo nano /etc/sysctl.conf
+
+        and add the following, 
+            vm.swappiness=10
+    
+    > check cache pressure 
+        cat /proc/sys/vm/vfs_cache_pressure 
+        output: 100 
+
+    > set a lower cache pressure value, 
+        sudo sysctl vm.vfs_cache_pressure=50
+
+    > set cache pressure on next restart 
+        sudo nano /etc/sysctl.conf
+        add the following, 
+            vm.vfs_cache_pressure=50
