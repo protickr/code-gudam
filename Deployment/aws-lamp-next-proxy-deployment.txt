@@ -503,3 +503,38 @@ NextJS SSR, Middleware will not work if we serve the static files of the app by
         sudo nano /etc/sysctl.conf
         add the following, 
             vm.vfs_cache_pressure=50
+
+
+
+* Configure s3 bucket
+    1. create a S3 bucket, make it private, block all public access
+    2. update .env in api 
+        AWS_DEFAULT_REGION="ap-southeast-1"
+        AWS_BUCKET="artstockbd"
+    3. to get access key and secret key 
+        a. create a user group 
+            > go to aws > IAM > groups > create > `artstockbd-dev`
+            > attach permission policies > search s3, chimesdk, cloudfront
+            > select full access for all service types 
+
+        b. create user 
+            > go to aws > IAM > users > create > `artstock-backend`
+            > add user to group `artstock-dev`
+            > next > go to user details > security credentials
+            > create access key > access key best practices and alternatives 
+            > select other > next > provide a description tag value
+
+* Configure cloudfront
+    1. go to AWS > cloudfront > create distribution
+    2. for origin domain select your s3 bucket's origin 
+    3. enable legacy OAI 
+    4. no waf 
+        AWS_CLOUDFRONT_URL = d11m4mbbd.cloudfront.net
+    
+    5. we can use signed url to prevent hotlinking to s3 resources by 
+        creating a 
+        1. keygroup 
+        2. key pair => store the public key => returns a KEY ID
+        3. store the private key in artstockbd/api/.env
+        4. sign cloudfront resource url using sdk function 
+
